@@ -17,7 +17,7 @@ export class MetaweatherService {
   constructor(private http: HttpClient) { }
 
   location(longitude: any, latitude: any) {
-    return this.http.get(`${this.cors_anywhere}${this.api}/location/search/?lattlong=${longitude},${latitude}`,{headers:this.headers});
+    return this.http.get(`${this.cors_anywhere}${this.api}/location/search/?lattlong=${latitude},${longitude}`,{headers:this.headers});
   }
 
   weather(woeid: number) {
