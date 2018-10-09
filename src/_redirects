@@ -1,1 +1,4 @@
+# Redirect default Netlify subdomain to primary domain
+https://umbrellaneeded.netlify.com/* https://umbrella.mellon.cloud/:splat 301!
+
 /*  /index.html 200
