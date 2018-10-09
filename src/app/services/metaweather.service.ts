@@ -21,7 +21,7 @@ export class MetaweatherService {
   }
 
   weather(woeid: number) {
-    return this.http.get(`${this.api}/location/${woeid}`,{headers:this.headers});
+    return this.http.get(`${this.cors_anywhere}${this.api}/location/${woeid}`,{headers:this.headers});
   }
 
 }
