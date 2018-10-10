@@ -12,6 +12,9 @@ import {
 })
 export class AppComponent implements OnInit {
 
+  simulate: Boolean = false;
+  simulateErrorOnState: number = 0;
+
   errorMessage: string;
   infoMessage: string;
 
@@ -20,7 +23,9 @@ export class AppComponent implements OnInit {
   longitude: any;
   latitude: any;
   weather_state_abbr: string;
-  umbrellaneeded: boolean = false;
+  umbrellaneeded: string = '';
+
+  state: number = 0;
 
   constructor(
     private geolocationService: GeolocationService,
@@ -37,40 +42,93 @@ export class AppComponent implements OnInit {
   }
 
   getPosition() {
+    this.state++;
     this.infoMessage = "Retrieving Position Data...";
-    this.geolocationService.get().subscribe(position => {
-      console.log("OK", position);
-      this.longitude = position.coords.longitude;
-      this.latitude = position.coords.latitude;
-      this.infoMessage = null;
-      this.getLocation();
-    }, error => {
-      this.errorMessage = "Could not retrieve position data.";
-    });
+    if(this.simulate) {
+      setTimeout(() => {
+        if(this.simulateErrorOnState === 1) {
+          this.errorMessage = "Could not retrieve position data";
+          this.finishedWithError();
+        } else {
+          this.getLocation();
+        }
+      },1000);
+    } else {
+      this.geolocationService.get().subscribe(position => {
+        this.longitude = position.coords.longitude;
+        this.latitude = position.coords.latitude;
+        this.getLocation();
+      }, error => {
+        this.errorMessage = "Could not retrieve position data";
+        this.finishedWithError();
+      });
+    }
   }
 
   getLocation() {
+    this.state++;
     this.infoMessage = "Retrieving Location Data...";
-    this.metaweatherService.location(this.longitude, this.latitude).subscribe(response => {
-      console.log(response);
-      this.city = response[0].title;
-      this.woeid = response[0].woeid;
-      this.getWeather();
-    }, error => {
-      this.errorMessage = "Could not retrieve location data.";
-    });
+    if(this.simulate) {
+      setTimeout(() => {
+        if(this.simulateErrorOnState === 2) {
+          this.errorMessage = "Could not retrieve location data";
+          this.finishedWithError();
+        } else {
+          this.getWeather();
+        }
+      },1000);
+    } else {
+      this.metaweatherService.location(this.longitude, this.latitude).subscribe(response => {
+        this.city = response[0].title;
+        this.woeid = response[0].woeid;
+        this.getWeather();
+      }, error => {
+        this.errorMessage = "Could not retrieve location data";
+        this.finishedWithError();
+      });
+    }
   }
 
   getWeather() {
+    this.state++;
     this.infoMessage = "Retrieving Weather Data...";
-    this.metaweatherService.weather(this.woeid).subscribe(response => {
-      console.log(response);
-      this.infoMessage = null;
-      this.weather_state_abbr = (response as any).consolidated_weather[0].weather_state_abbr;
-      this.umbrellaneeded = ['hc','lc','c'].indexOf(this.weather_state_abbr) === -1 ? true : false;
-    }, error => {
-      this.errorMessage = "Could not retrieve weather data.";
-    });
+    if(this.simulate) {
+      setTimeout(() => {
+        if(this.simulateErrorOnState === 3) {
+          this.errorMessage = "Could not retrieve weather data";
+          this.finishedWithError();
+        } else {
+          this.infoMessage = null;
+          this.weather_state_abbr = 'sn';
+          this.finished();
+        }
+      },1000);
+    } else {
+      this.metaweatherService.weather(this.woeid).subscribe(response => {
+        this.infoMessage = null;
+        this.weather_state_abbr = (response as any).consolidated_weather[0].weather_state_abbr;
+        this.finished();
+      }, error => {
+        this.errorMessage = "Could not retrieve weather data";
+        this.finishedWithError();
+      });
+    }
+  }
+
+  finishedWithError() {
+    this.state = 4;
+  }
+
+  finished() {
+    this.state++;
+    console.log("State",this.state);
+    if(this.weather_state_abbr === 'c' || this.weather_state_abbr === 'lc') {
+      this.umbrellaneeded = 'Nope, leave it at home';
+    } else if (this.weather_state_abbr === 'hc') {
+      this.umbrellaneeded = 'Maybe, security first';
+    } else {
+      this.umbrellaneeded = 'Definitely YES';
+    }
   }
 
   ngOnInit() {

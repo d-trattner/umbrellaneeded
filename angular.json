@@ -21,7 +21,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/scripts/blur.svg",
+              "src/assets/resources.svg",
               "src/_redirects"
             ],
             "styles": [

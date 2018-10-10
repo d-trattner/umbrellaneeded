@@ -7,7 +7,7 @@ a, a:visited, a:active, a:hover {
     height: 100%;*/
     z-index: 0;
 
-    background-image: url("../assets/bg.jpg");
+    background-image: url("../assets/bg_grey.jpg");
 
     /* Full height */
     height: 100%;
@@ -35,21 +35,54 @@ a, a:visited, a:active, a:hover {
     position: absolute;
     left:50%;
     top:50%;
-    width:400px;
-    height: 400px;
-    margin-left: -200px;
-    margin-top: -200px;
+    width:300px;
+    height: 300px;
+    margin-left: -150px;
+    margin-top: -150px;
     padding: 10px;
     text-align: center;
+    
     background-color: rgba(0,0,0,0.5);
     -webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.2);
     box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.2);
-    border-radius: 50px;
+    border: 2px solid white;
+    border-radius: 1000px;
+
+    transition: all 1s ease-out;
+    transform: scale(0);
+}
+
+.container.state1 {
+    transform: scale(0.25);
+}
+.container.state2 {
+    transform: scale(0.5);
+}
+.container.state3 {
+    transform: scale(0.75);
+}
+.container.state4 {
+    transform: scale(1);
+}
+
+.container.rendered {
+    
 }
 
 .title {
     font-size: 40px;
+    position: absolute;
+    /*left: -25px;
+    top: -50px;*/
+    left: 10px;
+    top: -50px;
+}
+.title path {
+    fill: transparent;
+}
+.title text {
+    fill: white;
 }
 
 .box {
@@ -62,22 +95,34 @@ a, a:visited, a:active, a:hover {
 }
 
 .error {
-    background-color: red;
-    color: white;
+    width: 200px;
+    height: 200px;
+    border-radius: 1000px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -110px;
+    margin-top: -110px;
+    background-color: white;
+    color: black;
 }
 
 .fin {
     width: 100%;
     text-align: center;
-    margin-top: 50px;
 }
 
 .fin img {
     width: 50%;
+    filter: gray; /* IE */
+    -webkit-filter: grayscale(1); /* Old WebKit */
+    -webkit-filter: grayscale(100%); /* New WebKit */
+    filter: url(../assets/resources.svg#desaturate); /* older Firefox */
+    filter: grayscale(100%); /* Current draft standard */
 }
 
 .answer {
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .bottom {
